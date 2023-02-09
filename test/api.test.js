@@ -8,7 +8,16 @@ const app = require('express');
 let should = chai.should();
 chai.use(chaiHTTP);
 
-
+describe('Test of /healthz GET API', () => {
+    it('health should be OK', (done) => {
+        chai.request(app)
+            .get('/healthz')
+            .end((err, res) => {
+                res.should.have.status(200);
+                done();
+            });
+    });
+});
 
 var assert = require('assert');
 describe('Array', function () {
