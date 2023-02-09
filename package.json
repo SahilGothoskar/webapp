@@ -1,0 +1,39 @@
+{
+  "name": "webapp",
+  "version": "1.0.0",
+  "description": "CSYE6225",
+  "main": "./seeders/app.js",
+  "scripts": {
+    "test": "mocha test/api.test.js",
+    "start": "nodemon app.js"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SahilGothoskar/webapp.git"
+  },
+  "keywords": [],
+  "author": "Sahil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SahilGothoskar/webapp/issues"
+  },
+  "homepage": "https://github.com/SahilGothoskar/webapp#readme",
+  "dependencies": {
+    "authorization": "^1.0.9",
+    "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
+    "chai": "^4.3.7",
+    "chai-http": "^4.3.0",
+    "express": "^4.18.2",
+    "jest": "^29.4.1",
+    "mocha": "^10.2.0",
+    "nodemon": "^2.0.20",
+    "pg": "^8.9.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.28.0",
+    "supertest": "^6.3.3"
+  }
+}
