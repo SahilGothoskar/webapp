@@ -24,34 +24,37 @@ app.get("/healthz", (req, res) => {
 });
 
 
-
 app.post('/v1/user', async (req, res) => {
-    const { first_name, last_name, password, username } = req.body;
+  const { first_name, last_name, password, username } = req.body;
 
-    if (!first_name || !last_name || !password || !username) {
-      return res.status(400).json({ error: 'Missing required parameters' });
-    }
+  if (!first_name || !last_name || !password || !username) {
+    return res.status(400).json({ error: 'Missing required parameters' });
+  }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-    User.create({
-      first_name,
-      last_name,
-      password: hashedPassword,
-      username
-    })
-    .then(user => {
-      res.status(201).json({
-        message: `User ${first_name} ${last_name} added successfully`,
-        user: user
-      });
-    })
-    .catch(error => {
-      res.status(500).json({
-        error: error
-      });
+  User.create({
+    first_name,
+    last_name,
+    password: hashedPassword,
+    username
+  })
+  .then(user => {
+    // exclude password field entirely from the user object
+    const { password, ...userWithoutPassword } = user.toJSON();
+    res.status(201).json({
+      message: `User ${first_name} ${last_name} added successfully`,
+      user: userWithoutPassword
     });
+  })
+  .catch(error => {
+    res.status(500).json({
+      error: error
+    });
+  });
 });
+
+
 
 app.get("/v1/user/:id", async (req, res) => {
   const decoded = decodeBase64(req);
@@ -295,44 +298,77 @@ app.put("/v1/user/:id", async (req, res) => {
   }
   });
 
-app.post("/v1/product", async (req, res) => {
-  const decoded = decodeBase64(req);
-  const username = decoded.substring(0, decoded.indexOf(":"));
-  const password = decoded.substring(
-  decoded.indexOf(":") + 1,
-  decoded.length
-  );
+  app.post("/v1/product", async (req, res) => {
+    const decoded = decodeBase64(req);
+    const username = decoded.substring(0, decoded.indexOf(":"));
+    const password = decoded.substring(
+    decoded.indexOf(":") + 1,
+    decoded.length
+    );
+  
+    if (!req.body.name) {
+      return res.status(400).json({ error: "name parameter is missing" });
+    }
+    if (!req.body.description) {
+      return res.status(400).json({ error: "description parameter is missing" });
+    }
+    if (!req.body.sku) {
+      return res.status(400).json({ error: "sku parameter is missing" });
+    }
+    if (!req.body.manufacturer) {
+      return res.status(400).json({ error: "manufacturer parameter is missing" });
+    }
+    if (!req.body.quantity) {
+      return res.status(400).json({ error: "quantity parameter is missing" });
+    }
+  
+    try {
+      const user = await User.findOne({
+        where: { username }
+      });
+      if (!user) {
+        return res.status(401).json({error: "Unauthorized"});
+      }
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(401).json({error: "Unauthorized"});
+      }
+  
+      const quantity = parseFloat(req.body.quantity);
+      if (isNaN(quantity) || !Number.isInteger(quantity)) {
+        return res.status(400).json({ error: "Please input the quantity in numerical format" });
+      }
+  
+      if (quantity > 100) {
+        return res.status(400).json({ error: "Quantity cannot exceed 100" });
+      }
 
-  try {
-    const user = await User.findOne({
-      where: { username }
-    });
-    if (!user) {
-      return res.status(401).json({error: "Unauthorized"});
+      // check if the sku is already present
+      const existingProduct = await Product.findOne({ where: { sku: req.body.sku } });
+      if (existingProduct) {
+        return res.status(400).json({ error: `SKU ${req.body.sku} is already present` });
+      }
+  
+      const product = await Product.create({
+        name: req.body.name,
+        description: req.body.description,
+        sku: req.body.sku,
+        manufacturer: req.body.manufacturer,
+        quantity: req.body.quantity,
+        date_added: new Date(),
+        date_last_updated: new Date(),
+        owner_user_id: user.id
+      });
+      return res.status(201).json({
+        message: `${product.name} added successfully`,
+        product: product
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({error: "Error while creating the product"});
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({error: "Unauthorized"});
-    }
-    const product = await Product.create({
-      name: req.body.name,
-      description: req.body.description,
-      sku: req.body.sku,
-      manufacturer: req.body.manufacturer,
-      quantity: req.body.quantity,
-      date_added: new Date(),
-      date_last_updated: new Date(),
-      owner_user_id: user.id
-    });
-    return res.status(201).json({
-      message: `${product.name} added successfully`,
-      product: product
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json({error: "Error while creating the product"});
-  }
-});
+  });
+  
 
 
 
