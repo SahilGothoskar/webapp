@@ -155,7 +155,7 @@ app.delete("/v1/product/:id", async (req, res) => {
     });
     if (!product) {
       return res.status(404).json({
-        error: "Product not found with the given owner user ID."
+        error: "Product not found with the given owner product ID."
       });
     }
     await product.destroy();
@@ -179,6 +179,28 @@ app.put("/v1/product/:id", async (req, res) => {
   const id = req.params.id;
   const { name, description, sku, manufacturer, quantity } = req.body;
 
+  // Check for missing fields
+  const missingFields = [];
+  if (!name) {
+    missingFields.push("name");
+  }
+  if (!description) {
+    missingFields.push("description");
+  }
+  if (!sku) {
+    missingFields.push("sku");
+  }
+  if (!manufacturer) {
+    missingFields.push("manufacturer");
+  }
+  if (!quantity) {
+    missingFields.push("quantity");
+  }
+  if (missingFields.length > 0) {
+    const errorMessage = missingFields.map(field => `${field} is missing`).join(", ");
+    return res.status(400).json({ error: errorMessage });
+  }
+
   try {
     const user = await User.findOne({
       where: { username }
@@ -195,7 +217,7 @@ app.put("/v1/product/:id", async (req, res) => {
     });
     if (!product) {
       return res.status(404).json({
-        message: "No product found with the given owner user ID."
+        message: "No product found with the given product ID."
       });
     }
     product.name = name;
@@ -211,6 +233,7 @@ app.put("/v1/product/:id", async (req, res) => {
     return res.status(500).json({ error: "Product not found" });
   }
 });
+
 
 
 
