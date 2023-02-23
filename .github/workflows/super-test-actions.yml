@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   pull_request:
     types: [ opened, reopened ]
-  push:
-    branches: [ main ]
 
 jobs:
   build:
@@ -27,3 +25,9 @@ jobs:
     - run: npm i
     - run: npm run build --if-present
     - run: npm test
+    - run: |
+          zip -r webApp.zip ./
+          pwd ./webApp
+          packer init .
+          packer fmt .
+          packer validate .
