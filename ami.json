@@ -1,0 +1,81 @@
+{
+
+
+  "variables": {
+      "aws_access_key": "AKIAY6BFNRRQYDGUCH6K",
+      "aws_secret_key": "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",
+      "aws_region": "us-east-2"
+  },
+  "builders": [
+      {
+          "type": "amazon-ebs",
+          "access_key": "{{user `aws_access_key`}}",
+          "secret_key": "{{user `aws_secret_key`}}",
+          "region": "{{user `aws_region`}}",
+          "ami_users": [ "241886877002" ],
+          "source_ami_filter": {
+              "filters": {
+                  "virtualization-type": "hvm",
+                  "name": "amzn2-ami-hvm-*",
+                  "root-device-type": "ebs"
+              },
+              "most_recent": true,
+              "owners": ["amazon"]
+          },
+          "instance_type": "t2.micro",
+          "ssh_username": "ec2-user",
+          "ami_name": "Custom AMI",
+          "tags": {
+              "Name": "Custom AMI"
+          }
+      }
+      ],
+      "provisioners": [
+        {
+          "type": "shell",
+          "inline": [
+              "sudo mkdir -p /home/ec2-user/scripts",
+              "sudo chown -R ec2-user:ec2-user /home/ec2-user/scripts",
+              "sudo chmod -R 755 /home/ec2-user/scripts"
+          ]
+      },
+      {
+        "type":"file",
+        "source": "service/node.service",
+        "destination":"/tmp/node.service"
+    },
+    {
+        "type":"file",
+        "source": "webapp.zip",
+        "destination": "/home/ec2-user/webapp.zip"
+    },  
+    
+        {
+        "type": "file",
+        "source": "shell/postgres.sh",
+        "destination": "/home/ec2-user/scripts/postgres.sh"
+        },
+        
+        {
+            "type": "file",
+            "source": "shell/node.sh",
+            "destination": "/home/ec2-user/scripts/node.sh"
+        },
+
+        {
+            "type": "shell",
+            "inline": [
+                "sudo chmod o+x /home/ec2-user/scripts/postgres.sh",
+                "sudo /home/ec2-user/scripts/postgres.sh",
+                "sudo chmod o+x /home/ec2-user/scripts/node.sh",
+                "sudo /home/ec2-user/scripts/node.sh"
+            ]
+        },
+        {
+            "type": "shell",
+            "inline": [
+                "rpm -Va --nofiles --nodigest"
+            ]
+        }
+    ]
+  }    
