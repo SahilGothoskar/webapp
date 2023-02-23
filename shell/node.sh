@@ -17,9 +17,9 @@ sudo yum install -y nodejs
 
 #sudo yum install unzip
 echo -e "Unzipping WebApp Application"
-unzip /home/ec2-user/webapp.zip
-sudo chmod 755 webapp/
-cd webapp/seeders
+unzip /home/ec2-user/webApp.zip
+sudo chmod 755 webApp/
+cd webApp/seeders
 
 echo -e "Installing Dependencies"
 sudo npm i
