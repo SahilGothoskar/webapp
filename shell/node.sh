@@ -4,8 +4,8 @@
 echo -e "Script Started to Install Node"
 sleep 10
 
-echo -e "Package Update"
-sudo yum update -y
+#echo -e "Package Update"
+#sudo yum update -y
 
 
 echo -e "Installation of NodeJs"
@@ -17,7 +17,8 @@ sudo yum install -y nodejs
 
 #sudo yum install unzip
 echo -e "Unzipping WebApp Application"
-unzip /home/ec2-user/webApp.zip
+sudo mkdir /home/ec2-user/webApp
+unzip /home/ec2-user/webApp.zip -d /home/ec2-user/webApp
 sudo chmod 755 webApp/
 cd webApp/seeders
 
