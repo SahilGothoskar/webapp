@@ -11,7 +11,7 @@ StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=webapp
 User=ec2-user
-ExecStart=/usr/bin/node /home/ec2-user/seeders/app.js
+ExecStart=/usr/bin/node /home/ec2-user/webApp/seeders/app.js
 
 
 [Install]
