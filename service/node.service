@@ -1,0 +1,19 @@
+[Unit]
+Description=webapp nodejs Application
+After=node.service
+
+[Service]
+Type=simple
+Environment=NODE_PORT=5000
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=webapp
+User=ec2-user
+ExecStart=/usr/bin/node /home/ec2-user/seeders/app.js
+
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=cloud-init.target
