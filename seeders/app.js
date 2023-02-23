@@ -23,36 +23,54 @@ app.get("/healthz", (req, res) => {
   }
 });
 
-
 app.post('/v1/user', async (req, res) => {
   const { first_name, last_name, password, username } = req.body;
 
-  if (!first_name || !last_name || !password || !username) {
-    return res.status(400).json({ error: 'Missing required parameters' });
+  if (!first_name) {
+    return res.status(400).json({ error: 'Missing first_name parameter' });
   }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
+  if (!last_name) {
+    return res.status(400).json({ error: 'Missing last_name parameter' });
+  }
 
-  User.create({
-    first_name,
-    last_name,
-    password: hashedPassword,
-    username
-  })
-  .then(user => {
-    // exclude password field entirely from the user object
-    const { password, ...userWithoutPassword } = user.toJSON();
+  if (!password) {
+    return res.status(400).json({ error: 'Missing password parameter' });
+  }
+
+  if (!username) {
+    return res.status(400).json({ error: 'Missing username parameter' });
+  }
+
+  try {
+    // check if the username already exists in the database
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ error: `Username '${username}' already exists` });
+    }
+
+    // if the username doesn't exist, create a new user
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await User.create({
+      first_name,
+      last_name,
+      password: hashedPassword,
+      username
+    });
+
+    const { password: _hashedPassword, ...userWithoutPassword } = newUser.toJSON();
     res.status(201).json({
       message: `User ${first_name} ${last_name} added successfully`,
       user: userWithoutPassword
     });
-  })
-  .catch(error => {
+  } catch (error) {
     res.status(500).json({
-      error: error
+      error: error.message
     });
-  });
+  }
 });
+
 
 
 
