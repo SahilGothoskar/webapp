@@ -105,6 +105,4 @@ build {
 
   provisioner "shell" {
     inline = ["rpm -Va --nofiles --nodigest"]
-  }
-
-}
+  
