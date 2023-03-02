@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-    s3_path: {
+    s3_bucket_path: {
     type:  DataTypes.STRING,
     allowNull: false
   },

@@ -634,7 +634,7 @@ dotenv.config({ path: '../.env' });
 
 const AWS = require("aws-sdk");
 const multer = require("multer");
-const upload = multer({ dest: "../uploads/" });
+const upload = multer({ dest: "..uploads/" });
 const s3 = new AWS.S3({
   accessKeyId: "AKIAY6BFNRRQYDGUCH6K",
   secretAccessKey: "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",
@@ -696,7 +696,7 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
     // create a new image record in the database
     const image = await Image.create({
       product_id: product.id,
-      s3_path: result.Location,
+      s3_bucket_path: result.Location,
       image_key: imageKey // add the imageKey to the image record
     });
 
