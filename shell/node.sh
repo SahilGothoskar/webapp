@@ -18,7 +18,7 @@ sudo yum install -y nodejs
 #sudo yum install unzip
 echo -e "Unzipping WebApp Application"
 sudo mkdir /home/ec2-user/webApp
-unzip /home/ec2-user/webApp.zip -d /home/ec2-user/webApp
+unzip /home/ec2-user/scripts/webApp.zip -d /home/ec2-user/webApp
 sudo chmod 755 webApp/
 cd webApp/seeders
 
