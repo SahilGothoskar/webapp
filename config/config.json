@@ -1,9 +1,11 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "redhat",
-    "database": "test",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "username": "csye6225",
+    "password": "redhat1234",
+    "database": "csye6225",
+    "host": "localhost",
+    "dialect": "postgres",
+    "port": "5432"
   }
 }
+

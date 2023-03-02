@@ -17,7 +17,7 @@
 # https://www.packer.io/docs/templates/hcl_templates/variables#type-constraints for more info.
 variable "aws_access_key" {
   type    = string
-  default = "AKIAY6BFNRRQYDGUCH6K"
+  default = ""
 }
 
 variable "aws_region" {
@@ -27,7 +27,7 @@ variable "aws_region" {
 
 variable "aws_secret_key" {
   type    = string
-  default = "d1NPVfvpxtepudICQl/fzSyLr41czLDfwlje6bff"
+  default = ""
 }
 
 # The amazon-ami data block is generated from your amazon builder source_ami_filter; a data
@@ -89,10 +89,10 @@ build {
     source      = "./webApp.zip"
   }
 
-  provisioner "file" {
-    destination = "/home/ec2-user/scripts/postgres.sh"
-    source      = "shell/postgres.sh"
-  }
+  // provisioner "file" {
+  //   destination = "/home/ec2-user/scripts/postgres.sh"
+  //   source      = "shell/postgres.sh"
+  // }
 
   provisioner "file" {
     destination = "/home/ec2-user/scripts/node.sh"
@@ -100,7 +100,7 @@ build {
   }
 
   provisioner "shell" {
-    inline = ["sudo chmod o+x /home/ec2-user/scripts/postgres.sh", "sudo /home/ec2-user/scripts/postgres.sh", "sudo chmod o+x /home/ec2-user/scripts/node.sh", "sudo /home/ec2-user/scripts/node.sh"]
+    inline = [  "sudo chmod o+x /home/ec2-user/scripts/node.sh", "sudo /home/ec2-user/scripts/node.sh"]
   }
 
   provisioner "shell" {
