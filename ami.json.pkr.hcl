@@ -46,8 +46,8 @@ data "amazon-ami" "awsdev_ami" {
   }
   most_recent = true
   owners      = ["amazon"]
-  region      = "${var.aws_region}"
-  secret_key  = "${var.aws_secret_key}"
+  region      = var.aws_region
+  secret_key  = var.aws_secret_key
 }
 
 locals {
