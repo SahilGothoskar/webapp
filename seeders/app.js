@@ -634,7 +634,7 @@ const dotenv = require('dotenv');
 
 const AWS = require("aws-sdk");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ dest: "/home/ec2-user/scripts/webApp/uploads/" });
 const s3 = new AWS.S3({
   accessKeyId: "AKIATQUMU2VFKSXGOL5E",
   secretAccessKey: "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",
