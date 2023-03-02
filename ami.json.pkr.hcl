@@ -71,7 +71,7 @@ build {
   }
 
   provisioner "file" {
-    destination = "/home/ec2-user/webApp.zip"
+    destination = "/home/ec2-user/scripts/webApp.zip"
     source      = "./webApp.zip"
   }
 
