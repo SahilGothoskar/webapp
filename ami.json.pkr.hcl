@@ -40,7 +40,7 @@ data "amazon-ami" "awsdev_ami" {
   most_recent = true
   owners      = ["amazon"]
   region      = var.aws_region
-  secret_key  = var.aws_secret_key
+  secret_key  = "${var.aws_secret_key}"
 }
 
 locals {
@@ -54,7 +54,7 @@ source "amazon-ebs" "Custom_AMI" {
   ami_users     = ["241886877002"]
   instance_type = "t2.micro"
   region        = "${var.aws_region}"
-  secret_key    = var.aws_secret_key
+  secret_key    = "${var.aws_secret_key}"
   source_ami    = "${data.amazon-ami.awsdev_ami.id}"
   ssh_username  = "ec2-user"
   tags = {
