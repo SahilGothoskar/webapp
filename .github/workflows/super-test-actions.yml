@@ -30,4 +30,4 @@ jobs:
           pwd ./webApp
           packer init .
           packer fmt .
-          packer validate -var 'aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}' -var 'aws_secret_key={{ secrets.AWS_SECRET_ACCESS_KEY }}' ami.json.pkr.hcl
+          packer validate -var 'aws_access_key=${{secrets.AWS_ACCESS_KEY_ID}}' -var 'aws_secret_key={{secrets.AWS_SECRET_ACCESS_KEY}}' ami.json.pkr.hcl
