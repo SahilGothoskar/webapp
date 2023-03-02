@@ -9,7 +9,7 @@ packer {
 
 variable "aws_access_key" {
   type    = string
-  
+  default = "AKIAY6BFNRRQYDGUCH6K"
 }
 
 variable "aws_region" {
@@ -19,6 +19,7 @@ variable "aws_region" {
 
 variable "aws_secret_key" {
   type    = string
+  default = "d1NPVfvpxtepudICQl/fzSyLr41czLDfwlje6bff"
   
 }
 
