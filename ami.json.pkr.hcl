@@ -17,7 +17,7 @@
 # https://www.packer.io/docs/templates/hcl_templates/variables#type-constraints for more info.
 variable "aws_access_key" {
   type    = string
-  default = ""
+  
 }
 
 variable "aws_region" {
@@ -27,7 +27,7 @@ variable "aws_region" {
 
 variable "aws_secret_key" {
   type    = string
-  default = ""
+  
 }
 
 # The amazon-ami data block is generated from your amazon builder source_ami_filter; a data
