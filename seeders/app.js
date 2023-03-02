@@ -629,15 +629,15 @@ app.get('/v1/product/:owner_user_id', async (req, res) => {
 
 const { Image } = require("../models");
 const dotenv = require('dotenv');
-dotenv.config({ path: '../.env' });
+//dotenv.config({ path: '../.env' });
 
 
 const AWS = require("aws-sdk");
 const multer = require("multer");
-const upload = multer({ dest: "..uploads/" });
+const upload = multer({ dest: "uploads/" });
 const s3 = new AWS.S3({
-  accessKeyId: "AKIAY6BFNRRQYDGUCH6K",
-  secretAccessKey: "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",
+  accessKeyId: "AKIATQUMU2VFKSXGOL5E",
+  secretAccessKey: "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",
 });
 const fs = require("fs");
 
