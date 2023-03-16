@@ -1,3 +1,4 @@
+const path = require("path");
 const bcrypt = require('bcrypt');
 const { sequelize, User, Product } = require('../models');
 const express = require('express');
@@ -677,7 +678,7 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
     // check if the file has the correct extension
     const fileExtension = path.extname(req.file.originalname);
     if (![".jpg", ".jpeg", ".png", ".gif"].includes(fileExtension.toLowerCase())) {
-      return res.status(400).json({ error: "Unsupported file type" });
+      return res.status(400).json({ error: "Unsupported File Type" });
     }
 
 
@@ -707,9 +708,7 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
 
     return res.status(200).json({
       message: `Image for product ${product.name} added successfully`,
-      image_url: product.image_url,
       image_id: image.id,
-      product_id: image.product_id,
       s3_bucket_path: image.s3_bucket_path,
       image_key: image.image_key,
       created_at: image.createdAt,
