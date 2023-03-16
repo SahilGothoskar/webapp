@@ -635,10 +635,7 @@ const dotenv = require('dotenv');
 const AWS = require("aws-sdk");
 const multer = require("multer");
 const upload = multer({ dest: "/home/ec2-user/scripts/webApp/uploads/" });
-const s3 = new AWS.S3({
-  accessKeyId: "AKIATQUMU2VFKSXGOL5E",
-  secretAccessKey: "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",
-});
+const s3 = new AWS.S3({});
 const fs = require("fs");
 
 
@@ -676,6 +673,14 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
       return res.status(400).json({ error: "No image uploaded" });
     }
 
+    
+    // check if the file has the correct extension
+    const fileExtension = path.extname(req.file.originalname);
+    if (![".jpg", ".jpeg", ".png", ".gif"].includes(fileExtension.toLowerCase())) {
+      return res.status(400).json({ error: "Unsupported file type" });
+    }
+
+
     // upload the image to S3
     const timestamp = new Date().getTime();
     const imageKey = `product-images/${product.id}/${timestamp}-${req.file.originalname}`;
@@ -703,6 +708,12 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
     return res.status(200).json({
       message: `Image for product ${product.name} added successfully`,
       image_url: product.image_url,
+      image_id: image.id,
+      product_id: image.product_id,
+      s3_bucket_path: image.s3_bucket_path,
+      image_key: image.image_key,
+      created_at: image.createdAt,
+      updated_at: image.updatedAt,
     });
   } catch (err) {
     console.log(err);

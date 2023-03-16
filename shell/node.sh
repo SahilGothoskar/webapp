@@ -5,7 +5,7 @@ echo -e "Script Started to Install Node"
 sleep 10
 
 echo -e "Package Update"
-sudo yum update -y
+sudo yum update -y && sudo yum upgrade -y
 
 
 echo -e "Installation of NodeJs"
@@ -38,8 +38,3 @@ sudo systemctl start node.service
 sudo systemctl enable node.service
 
 
-#echo -e "Restarting Service"
-#sudo systemctl stop node.service
-#sudo systemctl daemon-reload
-#sudo systemctl start node.service
-#sudo systemctl restart node.service
