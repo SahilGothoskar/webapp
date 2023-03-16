@@ -148,7 +148,44 @@ app.delete("/v1/product/:id", async (req, res) => {
 
 
 
-// Delete User Account Information
+// Delete Product Recent 16-March-2023
+// app.delete("/v1/product/:id", async (req, res) => {
+//   const decoded = decodeBase64(req);
+//   const username = decoded.substring(0, decoded.indexOf(":"));
+//   const password = decoded.substring(
+//     decoded.indexOf(":") + 1,
+//     decoded.length
+//   );
+//   const productId = req.params.id;
+
+//   try {
+//     const user = await User.findOne({
+//       where: { username }
+//     });
+//     if (!user) {
+//       return res.status(401).json({ error: "Unauthorized" });
+//     }
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ error: "Unauthorized" });
+//     }
+//     const product = await Product.findOne({
+//       where: { id: productId, owner_user_id: user.id }
+//     });
+//     if (!product) {
+//       return res.status(404).json({
+//         error: "Product not found with the given owner product ID."
+//       });
+//     }
+//     await product.destroy();
+//     return res.json({ message: `${product.name} Deleted` });
+//   } catch (err) {
+//     console.log(err);
+//     return res.status(500).json({ error: "Error deleting product" });
+//   }
+// });
+
+// Delete Product and Associated Images
 app.delete("/v1/product/:id", async (req, res) => {
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -170,21 +207,34 @@ app.delete("/v1/product/:id", async (req, res) => {
       return res.status(401).json({ error: "Unauthorized" });
     }
     const product = await Product.findOne({
-      where: { id: productId, owner_user_id: user.id }
+      where: { id: productId, owner_user_id: user.id },
+      include: [Image]
     });
     if (!product) {
       return res.status(404).json({
         error: "Product not found with the given owner product ID."
       });
     }
+    const images = product.Images;
+    await Promise.all(images.map(async (image) => {
+      const params = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: image.image_key,
+      };
+      s3.deleteObject(params, (err, data) => {
+        if (err) { console.log(err); } else { console.log(data); }
+      });
+      await image.destroy();
+      console.log(`Image record with ID ${image.id} destroyed successfully`);
+    }));
     await product.destroy();
-    return res.json({ message: `${product.name} Deleted` });
+    console.log(`Product with ID ${product.id} destroyed successfully`);
+    return res.json({ message: `${product.name} and all its associated images deleted` });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: "Error deleting product" });
+    return res.status(500).json({ error: "Error deleting product and associated images" });
   }
 });
-
 
 
 // Update Product Account Information USING PUT
