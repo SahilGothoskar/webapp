@@ -30,4 +30,4 @@ jobs:
           pwd ./webApp
           packer init .
           packer fmt .
-          packer validate  ami.json.pkr.hcl
+          packer validate  -var-file="vars.json" ami.json.pkr.hcl

@@ -2,17 +2,17 @@
 
 variable "aws_access_key" {
   type    = string
-  default = "AKIAY6BFNRRQYDGUCH6K"
+  //default = "AKIAY6BFNRRQYDGUCH6K" //Commented Out Ass7
 }
 
 variable "aws_region" {
   type    = string
-  default = "us-east-2"
+  //default = "us-east-2" //Commented Out Ass7
 }
 
 variable "aws_secret_key" {
   type    = string
-  default = "d1NPVfvpxtepudICQl/fzSyLr41czLDfwlje6bff"
+  //default = "d1NPVfvpxtepudICQl/fzSyLr41czLDfwlje6bff" //Commented Out Ass7
   
 }
 
@@ -24,7 +24,7 @@ variable "aws_secret_key" {
 # https://www.packer.io/plugins/datasources/amazon/ami
 data "amazon-ami" "awsdev_ami" {
   // id = "${var.source_ami}"
-  access_key = var.aws_access_key
+  access_key = "${var.aws_access_key}" ////Changed Earlier was var.aws_access_key
   filters = {
     name                = "amzn2-ami-hvm-*"
     root-device-type    = "ebs"
@@ -32,7 +32,7 @@ data "amazon-ami" "awsdev_ami" {
   }
   most_recent = true
   owners      = ["amazon"]
-  region      = var.aws_region
+  region      = "${var.aws_region}" //Changed Earlier was var.aws.region
   secret_key  = "${var.aws_secret_key}"
 }
 
@@ -42,7 +42,7 @@ locals {
 
 
 source "amazon-ebs" "Custom_AMI" {
-  access_key    = var.aws_access_key
+  access_key    = "${var.aws_access_key}" //Changed Earlier was var.aws_access_key
   ami_name      = "Aws_AMI-${local.timestamp}"
   ami_users     = ["241886877002"]
   instance_type = "t2.micro"
@@ -87,6 +87,15 @@ build {
 
   provisioner "shell" {
     inline = [  "sudo chmod o+x /home/ec2-user/scripts/node.sh", "sudo /home/ec2-user/scripts/node.sh"]
+  }
+  
+  provisioner "file" {
+    destination = "/home/ec2-user/scripts/cloudwatch.sh"
+    source ="shell/cloudwatch.sh"
+  }
+
+  provisioner "shell" {
+    inline = [  "sudo chmod o+x /home/ec2-user/scripts/cloudwatch.sh", "sudo /home/ec2-user/scripts/cloudwatch.sh"]
   }
 
   provisioner "shell" {

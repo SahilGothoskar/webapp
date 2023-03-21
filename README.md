@@ -6,6 +6,7 @@
 ### Get User Details
 
 GET /v1/user/:userid
+
 Required
 username:
 password:
@@ -13,23 +14,27 @@ password:
 ### Update User Details once user is authenticated
 
 PUT /v1/user/:userid
+
 Required
 username:
 password:
 
 JSON BODY:
 
+```
 {
 "first_name": "",
 "last_name": "",
 "username": "",
 "password": "" 
 }
+```
 
 ### ADD Product
 
 POST /v1/product
 
+```
 JSON BODY:
 {
 "name": "STRING"
@@ -38,10 +43,37 @@ JSON BODY:
 "quantity": INTEGER,
 "owner_user_id": "UUIDV4" 
 }
+```
 
 Required
-username:
-password:
+username:""
+password:""
+
+
+
+### ADD Product Image
+
+POST /v1/product/product_id/image
+
+File Type: jpeg,jpg,svg
+
+
+### Get Product Image
+
+GET /v1/product/:product_id/image/:image_id
+
+Required 
+username:""
+password:""
+
+
+### Get Images of all the Product for the one product
+
+GET /v1/product/:product_id/image/
+
+Required
+username:""
+password:""
 
 ## API Without Authentication
 
@@ -69,12 +101,6 @@ GET /v1/product
 ### Healthcheck API
 
 GET /healthz
-
-
-
-
-SD
-
 
 
 
@@ -116,7 +142,8 @@ Test case also written as part to github actions (use curl to hit the healthz ap
  * prostgres (pg)
  * Github Actions
  * Sequelize Framework
-
+ * Packer
+ * Terraform
 
 
 
