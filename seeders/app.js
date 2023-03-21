@@ -19,7 +19,7 @@ const logConfiguration = {
         new winston.transports.File({
             level: 'debug',
             // Create the log directory if it does not exist
-            filename: 'tester.log'
+            filename: '/home/ec2-user/scripts/tester.log'
         })
     ]
 };
