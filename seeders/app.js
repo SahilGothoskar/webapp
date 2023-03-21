@@ -5,6 +5,27 @@ const express = require('express');
 const { json } = require('sequelize');
 const app = express();
 
+////StatsD 
+const StatsD = require('statsd-client');
+const statsClient = new StatsD({
+  host: 'localhost',
+  port: 8125
+});
+
+//Logger File Winston
+const winston = require('winston');
+const logConfiguration = {
+    transports: [
+        new winston.transports.File({
+            level: 'debug',
+            // Create the log directory if it does not exist
+            filename: 'tester.log'
+        })
+    ]
+};
+const logger = winston.createLogger(logConfiguration);
+
+
 app.use(express.json());
 
 function decodeBase64(req) {
@@ -18,6 +39,8 @@ function decodeBase64(req) {
 
 app.get("/healthz", (req, res) => {
   try {
+    statsClient.increment('systemname.subsystem.value');
+    logger.debug("healthz hit");
     res.status(200).json("server responds with 200 OK if it is healhty.", 200);
   } catch (err) {
     res.json(err.message);
@@ -26,7 +49,8 @@ app.get("/healthz", (req, res) => {
 
 app.post('/v1/user', async (req, res) => {
   const { first_name, last_name, password, username } = req.body;
-
+  statsClient.increment('systemname.subsystem.value');
+  logger.debug("New User Create API hit");
   if (!first_name) {
     return res.status(400).json({ error: 'Missing first_name parameter' });
   }
@@ -76,6 +100,7 @@ app.post('/v1/user', async (req, res) => {
 
 
 app.get("/v1/user/:id", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(
@@ -150,6 +175,7 @@ app.delete("/v1/product/:id", async (req, res) => {
 
 // Delete Product Recent 16-March-2023
 app.delete("/v1/product/:id", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(
@@ -189,6 +215,7 @@ app.delete("/v1/product/:id", async (req, res) => {
 
 // Update Product Account Information USING PUT
 app.put("/v1/product/:id", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(
@@ -258,6 +285,7 @@ app.put("/v1/product/:id", async (req, res) => {
 
 // Update Product Account Information USING PATCH
 app.patch("/v1/product/:id", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(
@@ -302,6 +330,7 @@ app.patch("/v1/product/:id", async (req, res) => {
 
 // Update User Account Information
 app.put("/v1/user/:id", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(
@@ -340,7 +369,9 @@ app.put("/v1/user/:id", async (req, res) => {
   }
   });
 
+  //Add Product
   app.post("/v1/product", async (req, res) => {
+    statsClient.increment('systemname.subsystem.value');
     const decoded = decodeBase64(req);
     const username = decoded.substring(0, decoded.indexOf(":"));
     const password = decoded.substring(
@@ -413,8 +444,9 @@ app.put("/v1/user/:id", async (req, res) => {
   
 
 
-
+//Get Product
 app.get("/v1/product/:id", async(req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const id = req.params.id
   try {
     const product = await Product.findOne({
@@ -639,8 +671,9 @@ const upload = multer({ dest: "/home/ec2-user/scripts/webApp/uploads/" });
 const s3 = new AWS.S3({});
 const fs = require("fs");
 
-
+//Upload Product Image
 app.post("/v1/product/:product_id/image", upload.single("image"), async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(decoded.indexOf(":") + 1, decoded.length);
@@ -721,8 +754,9 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
 });
 
 
-
+//Delete Product Image
 app.delete("/v1/product/:productId/image/:imageId", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(decoded.indexOf(":") + 1, decoded.length);
@@ -786,6 +820,7 @@ app.delete("/v1/product/:productId/image/:imageId", async (req, res) => {
 //GET only 1 product Image 
 
 app.get("/v1/product/:product_id/image/:image_id", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(decoded.indexOf(":") + 1, decoded.length);
@@ -831,6 +866,7 @@ app.get("/v1/product/:product_id/image/:image_id", async (req, res) => {
 // GET all the images of the product
 
 app.get("/v1/product/:product_id/image", async (req, res) => {
+  statsClient.increment('systemname.subsystem.value');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(decoded.indexOf(":") + 1, decoded.length);
