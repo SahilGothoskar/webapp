@@ -89,7 +89,7 @@ build {
     inline = [  "sudo chmod o+x /home/ec2-user/scripts/node.sh", "sudo /home/ec2-user/scripts/node.sh"]
   }
   
-  provisioner "shell" {
+  provisioner "file" {
     destination = "/home/ec2-user/scripts/cloudwatch.sh"
     source ="shell/cloudwatch.sh"
   }
