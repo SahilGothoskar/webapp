@@ -49,7 +49,7 @@ app.get("/healthz", (req, res) => {
 
 app.post('/v1/user', async (req, res) => {
   const { first_name, last_name, password, username } = req.body;
-  statsClient.increment('systemname.subsystem.post_product_api');
+  statsClient.increment('systemname.subsystem.post_user_api');
   logger.debug("New User Create API hit");
   if (!first_name) {
     logger.debug("Missing first_name parameter");
