@@ -53,37 +53,49 @@ password:""
 
 ### ADD Product Image
 
+```
 POST /v1/product/product_id/image
-
+```
 File Type: jpeg,jpg,svg
 
 
 ### Get Product Image
 
+```
 GET /v1/product/:product_id/image/:image_id
+```
 
+```
 Required 
 username:""
 password:""
-
+```
 
 ### Get Images of all the Product for the one product
 
+```
 GET /v1/product/:product_id/image/
-
+```
+```
 Required
 username:""
 password:""
+```
 
 ## API Without Authentication
 
 ### Get details of the product
-GET /v1/product/:owner_user_id
 
+```
+GET /v1/product/:owner_user_id
+```
 ### Add new User
 
+```
 POST /v1/user
+```
 
+```
 JSON BODY:
 
 {
@@ -92,16 +104,19 @@ JSON BODY:
 "username": "",
 "password": "" 
 }
+```
 
 ### Get details of the product
 
+```
 GET /v1/product
-
+```
 
 ### Healthcheck API
 
+```
 GET /healthz
-
+```
 
 
 
