@@ -39,7 +39,7 @@ function decodeBase64(req) {
 
 app.get("/healthz", (req, res) => {
   try {
-    statsClient.increment('systemname.subsystem.value');
+    statsClient.increment('systemname.subsystem.healthz_api');
     logger.debug("healthz hit");
     res.status(200).json("server responds with 200 OK if it is healhty.", 200);
   } catch (err) {
@@ -49,7 +49,7 @@ app.get("/healthz", (req, res) => {
 
 app.post('/v1/user', async (req, res) => {
   const { first_name, last_name, password, username } = req.body;
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.post_product_api');
   logger.debug("New User Create API hit");
   if (!first_name) {
     logger.debug("Missing first_name parameter");
@@ -105,7 +105,7 @@ app.post('/v1/user', async (req, res) => {
 
 
 app.get("/v1/user/:id", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.get_user_api');
   logger.debug("Get User API Hit");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -185,7 +185,7 @@ app.delete("/v1/product/:id", async (req, res) => {
 
 // Delete Product Recent 16-March-2023
 app.delete("/v1/product/:id", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.delete_product_api');
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
   const password = decoded.substring(
@@ -230,7 +230,7 @@ app.delete("/v1/product/:id", async (req, res) => {
 
 // Update Product Account Information USING PUT
 app.put("/v1/product/:id", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.update_product_api');
   logger.debug("Update Product API hit w/ PUT!!! ");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -305,7 +305,7 @@ app.put("/v1/product/:id", async (req, res) => {
 
 // Update Product Account Information USING PATCH
 app.patch("/v1/product/:id", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.update_product_patch_api');
   logger.debug("Update Product API hit w/ PATCH!!!");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -355,7 +355,7 @@ app.patch("/v1/product/:id", async (req, res) => {
 
 // Update User Account Information
 app.put("/v1/user/:id", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.update_user_api');
   logger.debug("Update user details API Hit!!");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -400,7 +400,7 @@ app.put("/v1/user/:id", async (req, res) => {
 
   //Add Product
   app.post("/v1/product", async (req, res) => {
-    statsClient.increment('systemname.subsystem.value');
+    statsClient.increment('systemname.subsystem.post_product_api');
     logger.debug("Add Product API Hit!!!");
     const decoded = decodeBase64(req);
     const username = decoded.substring(0, decoded.indexOf(":"));
@@ -487,7 +487,7 @@ app.put("/v1/user/:id", async (req, res) => {
 
 //Get Product
 app.get("/v1/product/:id", async(req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.get_product_api');
   logger.debug("Fetch Product API Hit!!!");
   const id = req.params.id
   try {
@@ -716,7 +716,7 @@ const fs = require("fs");
 
 //Upload Product Image
 app.post("/v1/product/:product_id/image", upload.single("image"), async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.post_product_image_api');
   logger.debug("Upload Image API Hit!!!");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -805,7 +805,7 @@ app.post("/v1/product/:product_id/image", upload.single("image"), async (req, re
 
 //Delete Product Image
 app.delete("/v1/product/:productId/image/:imageId", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.delete_product_image_api');
   logger.debug("Delete Product Image API Hit!!!");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -876,7 +876,7 @@ app.delete("/v1/product/:productId/image/:imageId", async (req, res) => {
 //GET only 1 product Image 
 
 app.get("/v1/product/:product_id/image/:image_id", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.get_product_image_api_id');
   logger.debug("GET only 1 product Image API Hit!!");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
@@ -929,7 +929,7 @@ app.get("/v1/product/:product_id/image/:image_id", async (req, res) => {
 // GET all the images of the product
 
 app.get("/v1/product/:product_id/image", async (req, res) => {
-  statsClient.increment('systemname.subsystem.value');
+  statsClient.increment('systemname.subsystem.get_product_image_api_many');
   logger.debug("GET All product Image API Hit!!");
   const decoded = decodeBase64(req);
   const username = decoded.substring(0, decoded.indexOf(":"));
