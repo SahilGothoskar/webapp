@@ -13,6 +13,8 @@ jobs:
   build:
     name: workflow_aws
     runs-on: ubuntu-latest
+    outputs:
+      ID_OF_AMI: ${{steps.AMI_ID_OUTPUT.outputs.ID_OF_AMI}}
 
     strategy:
       matrix:
@@ -35,6 +37,17 @@ jobs:
           zip -r webApp.zip ./
           pwd ./webApp
           packer build  -var-file="vars.json" ami.json.pkr.hcl
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}          
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      - name: Getting AMI id as outputs
+        id: AMI_ID_OUTPUT
+        run: |
+          ID_OF_AMI=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+          echo $ID_OF_AMI
+          echo "ID_OF_AMI=$ID_OF_AMI" >> "$GITHUB_OUTPUT"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}          
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
