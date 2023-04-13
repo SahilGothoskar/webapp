@@ -64,8 +64,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: AKIATQUMU2VFAJ3PZG3A
-          aws-secret-access-key: 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
+          aws-access-key-id: "AKIATQUMU2VFAJ3PZG3A"
+          aws-secret-access-key: "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"
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
       - name: AMI id verify
