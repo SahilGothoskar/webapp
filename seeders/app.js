@@ -972,3 +972,14 @@ app.get("/v1/product/:product_id/image", async (req, res) => {
     return res.status(500).json({ error: "Error while retrieving product images" });
   }
 });
+
+
+app.get("/healthz_check", (req, res) => {
+  try {
+    statsClient.increment('systemname.subsystem.healthz_check_api');
+    logger.debug("healthz_check hit");
+    res.status(200).json("server responds with 200 OK if it is healhty.", 200);
+  } catch (err) {
+    res.json(err.message);
+  }
+});
