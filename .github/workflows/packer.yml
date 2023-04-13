@@ -66,8 +66,7 @@ jobs:
         with:
           aws-access-key-id: "AKIATQUMU2VFAJ3PZG3A"
           aws-secret-access-key: "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"
-        env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          aws-region: "us-east-2"
       - name: AMI id verify
         run: echo $ID_OF_AMI
       - name: check aws version
