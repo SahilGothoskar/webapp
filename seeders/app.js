@@ -974,7 +974,7 @@ app.get("/v1/product/:product_id/image", async (req, res) => {
 });
 
 
-app.get("/healthz_ch", (req, res) => {
+app.get("/healthz_check", (req, res) => {
   try {
     statsClient.increment('systemname.subsystem.healthz_check_api');
     logger.debug("healthz_check hit");
