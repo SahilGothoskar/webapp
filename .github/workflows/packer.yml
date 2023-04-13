@@ -63,10 +63,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
-        env:
-          AWS_ACCESS_KEY_ID_DEMO: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
-          AWS_SECRET_ACCESS_KEY_DEMO: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEMO }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEMO }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: AMI id verify
         run: echo $ID_OF_AMI
       - name: check aws version
