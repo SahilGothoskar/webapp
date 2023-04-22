@@ -974,10 +974,10 @@ app.get("/v1/product/:product_id/image", async (req, res) => {
 });
 
 
-app.get("/sahil_check", (req, res) => {
+app.get("/healthz_check", (req, res) => {
   try {
     statsClient.increment('systemname.subsystem.healthz_check_api');
-    logger.debug("sahil_check hit");
+    logger.debug("healthz_check hit");
     res.status(200).json("server responds with 200 OK if it is healhty.", 200);
   } catch (err) {
     res.json(err.message);
